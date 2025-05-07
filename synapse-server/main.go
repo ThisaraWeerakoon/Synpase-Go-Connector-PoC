@@ -42,8 +42,6 @@ func main() {
 			"filename": "poc_output.txt",
 			"content":  "Hello from Synapse Go Connector Framework! Timestamp: " + time.Now().String(),
 		}
-		// Optional connector config override for this specific call (can be nil)
-		// var connectorConfigOverride map[string]interface{} = map[string]interface{}{"baseDirectory": "./custom_connector_data"}
 
 		respCreate, err := cm.Invoke("SimpleFileConnector", "create", nil, createParams, msgCtxCreate)
 		if err != nil {

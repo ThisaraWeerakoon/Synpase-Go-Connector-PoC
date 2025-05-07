@@ -1,1 +1,0 @@
-Hello from Synapse Go Connector Framework! Timestamp: 2025-05-07 14:16:55.721735091 +0530 +0530 m=+2.000860473

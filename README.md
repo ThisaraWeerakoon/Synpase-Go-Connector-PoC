@@ -14,29 +14,31 @@ The core idea is to have a main Synapse Go Server that hosts the mediation engin
 
 ```mermaid
 graph LR
-    subgraph "Synapse Go Server"
-        MediationFlow["Mediation Flow"]
-        ConnectorManager["Connector Manager"]
+    subgraph "Synapse Connector Design"
+        subgraph "Synapse Go Server"
+            MediationFlow["Mediation Flow"]
+            ConnectorManager["Connector Manager"]
+        end
+
+        subgraph "Connector_Process (e.g., SimpleFileConnector)"
+            ConnectorLogic["Connector Business Logic"]
+            %% SCPServer node text with parentheses is quoted
+            SCPServer["SCP Server (TCP Listener)"]
+        end
+
+        %% ConfigStore node text with period is quoted within the cylinder shape
+        ConfigStore[("Connector Definitions .json")]
+        %% ExternalSystem node text with periods is quoted within the stadium shape
+        ExternalSystem(["External System e.g., File System"])
+
+        MediationFlow -- "Invokes Operation" --> ConnectorManager
+        ConnectorManager -- "Reads Config" --> ConfigStore
+        ConnectorManager -- "Manages Lifecycle (Start/Stop)" --> ConnectorLogic
+        ConnectorManager -- "SCP Request (JSON/TCP)" --> SCPServer
+        SCPServer -- "SCP Response (JSON/TCP)" --> ConnectorManager
+        SCPServer -- "Processes Request" --> ConnectorLogic
+        ConnectorLogic -- "Interacts" --> ExternalSystem
     end
-
-    subgraph "Connector_Process (e.g., SimpleFileConnector)"
-        ConnectorLogic["Connector Business Logic"]
-        %% SCPServer node text with parentheses is quoted
-        SCPServer["SCP Server (TCP Listener)"]
-    end
-
-    %% ConfigStore node text with period is quoted within the cylinder shape
-    ConfigStore[("Connector Definitions .json")]
-    %% ExternalSystem node text with periods is quoted within the stadium shape
-    ExternalSystem(["External System e.g., File System"])
-
-    MediationFlow -- "Invokes Operation" --> ConnectorManager
-    ConnectorManager -- "Reads Config" --> ConfigStore
-    ConnectorManager -- "Manages Lifecycle (Start/Stop)" --> ConnectorLogic
-    ConnectorManager -- "SCP Request (JSON/TCP)" --> SCPServer
-    SCPServer -- "SCP Response (JSON/TCP)" --> ConnectorManager
-    SCPServer -- "Processes Request" --> ConnectorLogic
-    ConnectorLogic -- "Interacts" --> ExternalSystem
 ```
 
 **Design Rationale:**

@@ -1,0 +1,8 @@
+{
+    "name": "SimpleFileConnector",
+    "executable_path_relative_to_connectors_dir": "simple-file-connector/simple-file-connector",
+    "default_port": 9091,
+    "default_config": {
+        "baseDirectory": "./connector_runtime_data"
+    }
+}
